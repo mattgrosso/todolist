@@ -1,10 +1,12 @@
 function toDoList(){
 
+  var itemList = [];
   var itemCount = $(".incomplete-items")
 
   $("form").submit(function(event){
     event.preventDefault();
     var inputText = $(".new-todo").val();
+    itemList.push({timeStamp: Date.now(), entry: inputText, status: 'active'});
     var checkMark = $('<button>')
       .attr({class: 'check'});
     var newItemText = $('<p>').text(inputText);
@@ -24,6 +26,7 @@ function toDoList(){
       .prepend(newEntry);
     itemCount.text(Number(itemCount.text()) + 1);
     $('.new-todo').val("");
+    console.log(itemList);
   });
 
   $('ul').on('click', 'p', function(){
