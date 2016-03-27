@@ -1,32 +1,26 @@
-function toDoList(){
+(function toDoList(){
 
-  var itemList = [];
-  var itemCount = $(".incomplete-items")
+  var itemList = {};
+  var itemCount = $('.incomplete-items')
 
-  $("form").submit(function(event){
+  $('form').submit(function(event){
     event.preventDefault();
-    var inputText = $(".new-todo").val();
-    itemList.push({timeStamp: Date.now(), entry: inputText, status: 'active'});
-    var checkMark = $('<button>')
-      .attr({class: 'check'});
+    var inputText = $('.new-todo').val();
+    var entryTime = Date.now();
+    itemList[entryTime] = {entry: inputText};
+    var checkMark = $('<button>').attr({class: 'check'});
     var newItemText = $('<p>').text(inputText);
-    var changeEntry = $('<input>')
-      .attr({type: 'text', class: 'edit-todo', value: inputText});
-    var deleteButton = $('<button>')
-      .attr({class: 'delete'})
-      .text('X');
-    var listArticle = $("<article>")
+    var changeEntry = $('<input>').attr({type: 'text', class: 'edit-todo', value: inputText});
+    var deleteButton = $('<button>').attr({class: 'delete'}).text('X');
+    var listArticle = $('<article>')
       .append(checkMark)
       .append(newItemText)
       .append(changeEntry)
       .append(deleteButton);
-    var newEntry = $("<li>")
-      .append(listArticle);
-    $(".items")
-      .prepend(newEntry);
+    var newEntry = $('<li>').append(listArticle).attr({id: entryTime});
+    $('.items').prepend(newEntry);
     itemCount.text(Number(itemCount.text()) + 1);
-    $('.new-todo').val("");
-    console.log(itemList);
+    $('.new-todo').val('');
   });
 
   $('ul').on('click', 'p', function(){
@@ -43,13 +37,16 @@ function toDoList(){
   $('ul').on('click', '.check', function(event){
     if($(this).closest('article').hasClass('completed')){
       itemCount.text(Number(itemCount.text()) + 1);
-    } else{
+    }
+    else{
       itemCount.text(Number(itemCount.text()) - 1);
     }
     $(this).closest('article').toggleClass('completed');
   });
 
   $('ul').on('click', '.delete', function(event){
+    var idToDelete = $(this).closest('li')[0].id;
+    delete itemList[idToDelete];
     $(this).closest('li').remove();
     itemCount.text(Number(itemCount.text()) - 1);
   });
@@ -81,10 +78,4 @@ function toDoList(){
     $('.show-completed').addClass('active');
   });
 
-
-
-
-
-}
-
-toDoList();
+})();
